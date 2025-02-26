@@ -41,8 +41,8 @@ public class Bill {
    * @return bill
    */
   public static Bill makeBill(final IceCreamOrder order) {
-    final var nbBalls = order.getBalls().values().stream().mapToInt(Integer::intValue).sum();
-    final var price = PRICES.get(nbBalls) + order.getMixins().size() * MIXIN_PRICE;
+    final var nbBalls = order.balls().values().stream().mapToInt(Integer::intValue).sum();
+    final var price = PRICES.get(nbBalls) + order.mixins().size() * MIXIN_PRICE;
     return new Bill(price);
   }
 
