@@ -2,7 +2,7 @@ package io.hosuaby;
 
 import java.util.Random;
 
-public interface Authentication {
+public sealed interface Authentication permits Authentication.AbstractAuthentication {
     static Authentication cognito() {
         return new CognitoAuthentication(baseUrl() + "/cognito");
     }
@@ -23,7 +23,9 @@ public interface Authentication {
         return new Random().nextInt(600_000);
     }
 
-    class AbstractAuthentication implements Authentication {
+    abstract sealed class AbstractAuthentication
+            implements Authentication
+            permits Authentication.CognitoAuthentication, Authentication.Auth0Authentication {
         private final String url;
 
         public AbstractAuthentication(final String url) {
@@ -31,7 +33,7 @@ public interface Authentication {
         }
     }
 
-    class CognitoAuthentication extends AbstractAuthentication {
+    final class CognitoAuthentication extends AbstractAuthentication {
         public CognitoAuthentication(final String url) {
             super(url);
         }
@@ -42,7 +44,7 @@ public interface Authentication {
         }
     }
 
-    class Auth0Authentication extends AbstractAuthentication {
+    final class Auth0Authentication extends AbstractAuthentication {
         public Auth0Authentication(final String url) {
             super(url);
         }
